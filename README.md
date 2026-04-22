@@ -121,6 +121,8 @@ notes:
 
 ## Future Extensions
 
+### Additional lab markers
+
 The following fields are reserved for future Dataview queries and can be added to any lab note:
 
 ```yaml
@@ -133,6 +135,38 @@ body_weight:
 waist_circumference:
 vitamin_d:
 ```
+
+Additional panels to add from previous tests:
+
+- **Thyroid:** `tsh`, `ft3`, `ft4`
+- **Iron / Anaemia:** `ferritin`, `iron`, `transferrin_saturation`, `hemoglobin`
+- **Inflammation:** `crp`, `leukocytes`
+- **Vitamins:** `vitamin_b12`, `folate`, `vitamin_d` (already reserved)
+
+Each new panel needs a corresponding Dataview table added to `Health/Dashboard.md`.
+
+### Doctor's visit notes
+
+Add a `Health/Visits/` folder with a `_Visit_Template.md` for GP and specialist appointments. Fields to track:
+
+- `type: visit`
+- `date`, `doctor`, `specialty`
+- `reason` — presenting complaint
+- `findings` — examination / test results discussed
+- `diagnoses`
+- `medications_changed` — new / stopped / adjusted
+- `referrals`
+- `next_appointment`
+
+Also add a `/visit-import` skill (parallel to `/lab-import`) that extracts structured data from visit summary letters or photos of doctor's notes.
+
+### Dashboard enhancements
+
+Extend `Health/Dashboard.md` with:
+
+- **Recent Visits** — Dataview table from `Health/Visits/` showing last 5 entries (date, doctor, reason, next appointment)
+- **Current Issues** — inline list or Dataview query of open diagnoses / active problems
+- **Next Steps** — Dataview task list (`- [ ]`) aggregated across visit and lab notes for upcoming appointments, referrals, and follow-up tests
 
 ## PKM Integration
 
