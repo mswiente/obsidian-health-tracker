@@ -136,6 +136,8 @@ Hydration: {value}
 
 ## Interpretation
 
+{Write a brief factual summary of notable findings. For each value outside the reference range, note the value, the direction (↑/↓), and any plausible context factor (e.g. training, supplementation, hydration). End with a one-liner on everything that was within range. Do not give medical advice.}
+
 ```
 
 ### 6. Report
