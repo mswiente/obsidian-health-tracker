@@ -105,6 +105,24 @@ notes:
 
 # Lab Results {date}
 
+| Marker | Value | Unit | Reference | Status |
+|---|---|---|---|---|
+| Creatinine | {value or —} | {unit} | {ref range} | {↑ / ↓ / ✓ or —} |
+| eGFR (Creatinine) | {value or —} | ml/min/1.73m² | >90 | {↑ / ↓ / ✓ or —} |
+| Cystatin C | {value or —} | {unit} | {ref range} | {↑ / ↓ / ✓ or —} |
+| eGFR Combined | {value or —} | ml/min/1.73m² | {ref range} | {↑ / ↓ / ✓ or —} |
+| ACR Urine | {value or —} | {unit} | {ref range} | {↑ / ↓ / ✓ or —} |
+| GGT | {value or —} | U/l | {ref range} | {↑ / ↓ / ✓ or —} |
+| AST | {value or —} | U/l | {ref range} | {↑ / ↓ / ✓ or —} |
+| ALT | {value or —} | U/l | {ref range} | {↑ / ↓ / ✓ or —} |
+| Sodium | {value or —} | mmol/l | {ref range} | {↑ / ↓ / ✓ or —} |
+| Potassium | {value or —} | mmol/l | {ref range} | {↑ / ↓ / ✓ or —} |
+| Calcium | {value or —} | mmol/l | {ref range} | {↑ / ↓ / ✓ or —} |
+
+Include reference ranges as printed on the report. Use ✓ for within range, ↑/↓ for flagged, — for not measured.
+
+---
+
 ## Kidney Function
 
 Creatinine: {value with unit, e.g. "85 µmol/L"}
