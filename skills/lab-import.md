@@ -1,22 +1,31 @@
 ---
-description: Extract lab results from an image or PDF and create an Obsidian lab note
+description: Extract lab results from one or more images/PDFs and create an Obsidian lab note
 allowed-tools: [Read, Write, Bash]
 ---
 
-Import lab results from an image or PDF into an Obsidian lab note.
+Import lab results from one or more images or PDFs into a single Obsidian lab note.
 
-File to import: $ARGUMENTS
+Files to import: $ARGUMENTS
 
 ## Steps
 
-### 1. Resolve the file
+### 1. Resolve the files
 
-If `$ARGUMENTS` is empty, ask the user: "Please provide the path to your lab result image or PDF."
-Otherwise use the provided path directly.
+Parse `$ARGUMENTS` as a space-separated list of file paths. Quoted paths (with spaces) are respected.
+If `$ARGUMENTS` is empty, ask the user: "Please provide one or more paths to lab result images or PDFs."
+
+For each file:
+- If it is a `.heic` file, convert it first:
+  ```bash
+  sips -s format jpeg --resampleWidth 1600 "{input}" --out /tmp/lab_import_{n}.jpg
+  ```
+  Then read the converted file.
+- If it is a PDF, use `pdftoppm` if needed (already shown to work in this project).
+- Otherwise read directly.
 
 ### 2. Read and extract
 
-Use the Read tool to open the file. It handles `.png`, `.jpg`, `.pdf` natively.
+Read each file in sequence using the Read tool. Merge the extracted values into a single result set — later files supplement earlier ones. If the same field appears in multiple files with different values, flag the conflict in the summary (step 4) and ask the user to choose.
 
 Extract all available values and map German or English field names to these YAML keys:
 
@@ -170,4 +179,9 @@ Print the full path of the created file. Done.
 cp skills/lab-import.md ~/.claude/commands/
 ```
 
-Then use as: `/lab-import /path/to/lab-report.png`
+Then use as:
+```
+/lab-import /path/to/lab-report.png
+/lab-import /path/to/page1.pdf /path/to/page2.pdf
+/lab-import "/path with spaces/report.heic" /path/to/page2.jpg
+```

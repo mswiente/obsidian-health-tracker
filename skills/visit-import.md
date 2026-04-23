@@ -1,26 +1,33 @@
 ---
-description: Extract a doctor's visit or imaging report and create an Obsidian visit note
+description: Extract a doctor's visit or imaging report from one or more files and create an Obsidian visit note
 allowed-tools: [Read, Write, Bash]
 ---
 
-Import a doctor's visit summary or imaging report into an Obsidian visit note.
+Import a doctor's visit summary or imaging report from one or more files into a single Obsidian visit note.
 
-File to import: $ARGUMENTS
+Files to import: $ARGUMENTS
 
 ## Steps
 
-### 1. Resolve the file
+### 1. Resolve the files
 
-If `$ARGUMENTS` is empty, ask the user: "Please provide the path to the visit letter, imaging report, or photo."
-Otherwise use the provided path directly. If it is a HEIC file, convert it first:
-```bash
-sips -s format jpeg -r 90 --resampleWidth 1600 "{input}" --out /tmp/visit_import.jpg
-```
-Then read `/tmp/visit_import.jpg`.
+Parse `$ARGUMENTS` as a space-separated list of file paths. Quoted paths (with spaces) are respected.
+If `$ARGUMENTS` is empty, ask the user: "Please provide one or more paths to visit letters, imaging reports, or photos."
+
+For each file:
+- If it is a `.heic` file, convert it first:
+  ```bash
+  sips -s format jpeg -r 90 --resampleWidth 1600 "{input}" --out /tmp/visit_import_{n}.jpg
+  ```
+  Then read the converted file.
+- If it is a PDF, use `pdftoppm` if needed (already shown to work in this project).
+- Otherwise read directly.
 
 ### 2. Read and extract
 
-Use the Read tool to open the file. Extract these fields:
+Read each file in sequence using the Read tool. Merge the extracted fields into a single result — later files supplement earlier ones (e.g. a separate imaging appendix adds to the main letter). If the same field appears in multiple files with conflicting values, flag it in the summary (step 3) and ask the user to choose.
+
+Extract these fields:
 
 | Field | German label | Notes |
 |---|---|---|
@@ -161,4 +168,9 @@ Print the full path of the created file. Done.
 cp skills/visit-import.md ~/.claude/commands/
 ```
 
-Then use as: `/visit-import /path/to/report.pdf`
+Then use as:
+```
+/visit-import /path/to/arztbrief.pdf
+/visit-import /path/to/letter.pdf /path/to/imaging-appendix.pdf
+/visit-import "/path with spaces/report.heic" /path/to/page2.jpg
+```
