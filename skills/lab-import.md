@@ -49,8 +49,9 @@ Extract all available values and map German or English field names to these YAML
 Rules:
 - Store **numeric values only** in YAML (no units, no reference ranges)
 - Convert `date` to `YYYY-MM-DD` format
-- For descriptive fields (`ultrasound_liver`, `ultrasound_kidney`): store the finding as a short string (e.g. `unauffällig`, `normal`)
+- For descriptive fields (`ultrasound_liver`, `ultrasound_kidney`): store a short quoted string (e.g. `"unauffällig"`, `"normal"`)
 - Leave any undetected field empty (just `field:` with no value) — never guess or interpolate
+- **YAML string values must be safe:** wrap any text value in double quotes; avoid colons, em dashes (`–`), and unescaped special characters inside YAML values
 
 ### 3. Ask for context fields
 

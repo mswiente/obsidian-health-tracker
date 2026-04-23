@@ -50,7 +50,8 @@ Extract these fields:
 Rules:
 - Convert `date` to YYYY-MM-DD
 - Leave any undetected field empty
-- For `findings` and `assessment`: copy the text faithfully, preserving medical terminology
+- **YAML values must be safe strings:** always wrap `reason`, `diagnoses`, `assessment`, `medications_changed`, `referrals`, and `next_appointment` in double quotes. Keep them short (one-line summaries) — no colons, no em dashes (`–`), no unescaped special characters. Full text goes in the markdown body only.
+- For `findings` and `assessment` in the **body**: copy the text faithfully, preserving medical terminology
 
 ### 3. Show summary and confirm
 
