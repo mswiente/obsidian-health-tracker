@@ -33,22 +33,19 @@ Copy `Health/Dashboard.md` and `Health/Labs/_Lab_Template.md` into your vault, p
 
 The `Health/` folder must live at the vault root for the Dataview queries to resolve correctly.
 
-### 2. Install the `/lab-import` skill (optional)
-
-The skill lets you point Claude Code at a lab result image or PDF and have it extract values and create the Obsidian note automatically.
+### 2. Install the skills (optional)
 
 ```bash
 cp skills/lab-import.md ~/.claude/commands/
+cp skills/visit-import.md ~/.claude/commands/
 ```
 
-Restart Claude Code, then use it as:
+| Skill | Usage | What it imports |
+|---|---|---|
+| `/lab-import` | `/lab-import /path/to/blutbefund.pdf` | Blood / urine lab results |
+| `/visit-import` | `/visit-import /path/to/arztbrief.pdf` | Doctor's visits, imaging reports (MRT, CT, X-ray, Ultrasound) |
 
-```
-/lab-import /path/to/lab-screenshot.png
-/lab-import /path/to/blutbefund.pdf
-```
-
-The skill handles both German and English lab report field names.
+Both skills handle German and English field names and support images (HEIC, JPG, PNG) and PDFs.
 
 ## Usage
 
