@@ -165,6 +165,62 @@ Extend `Health/Dashboard.md` with:
 - **Current Issues** — inline list or Dataview query of open diagnoses / active problems
 - **Next Steps** — Dataview task list (`- [ ]`) aggregated across visit and lab notes for upcoming appointments, referrals, and follow-up tests
 
+### Conditions and problem list
+
+Add a `Health/Conditions/` folder to track both **chronic conditions** (ongoing, managed long-term) and **acute issues** (the reason behind a specific visit or test series). This is the connective layer that ties visits and labs together.
+
+#### Condition note fields
+
+```yaml
+---
+type: condition
+status: active          # active | resolved | managed | monitoring
+condition_type: chronic # chronic | acute
+name:                   # e.g. Hypothyreose, Sodbrennen, Handgelenksschmerz
+onset_date:             # YYYY-MM-DD (when first noticed / diagnosed)
+resolved_date:          # YYYY-MM-DD (leave empty if ongoing)
+icd_code:               # optional ICD-10 code
+current_treatment:      # short quoted summary of active medication/therapy
+related_visits:         # list of wikilinks, e.g. [[2025-03-11-oegd-magenspiegelung]]
+related_labs:           # list of wikilinks, e.g. [[2026-03-05-lab-results]]
+---
+```
+
+#### Examples
+
+| Condition | Type | Status | Triggers |
+|---|---|---|---|
+| Hypothyreose | chronic | managed | Thyroxin monitoring via TSH labs |
+| Heuschnupfen | chronic | active (seasonal) | — |
+| Sodbrennen / GERD | chronic | active | → ÖGD 2025-03-11 |
+| Handgelenksschmerz links | acute | monitoring | → MRT 2025-09-03 |
+
+#### Linking back from visits and labs
+
+Add a `condition` field to visit and lab note frontmatter to link them to the triggering condition:
+
+```yaml
+condition: "[[sodbrennen-gerd]]"   # in the ÖGD visit note
+condition: "[[handgelenksschmerz-links]]"   # in the MRT visit note
+```
+
+This enables Dataview queries like "show all visits and labs related to this condition" directly from the condition note.
+
+#### Dashboard section
+
+Add an **Active Conditions** section to `Health/Dashboard.md`:
+
+```dataview
+TABLE condition_type AS "Type", onset_date AS "Since", current_treatment AS "Treatment"
+FROM "Health/Conditions"
+WHERE type = "condition" AND status != "resolved"
+SORT condition_type ASC, onset_date ASC
+```
+
+#### `/condition-import` skill (future)
+
+A skill that takes a diagnosis letter or discharge summary and creates or updates a condition note, auto-linking it to the relevant visit.
+
 ## PKM Integration
 
 This system is designed to integrate with [pkm.ai](https://github.com/mswientek/pkm.ai). A `pkm lab create` command (deferred) will create lab notes from the CLI without opening Obsidian.
